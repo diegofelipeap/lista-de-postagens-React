@@ -1,0 +1,69 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "a title",
+      "views": 100
+    },
+    {
+      "id": "2",
+      "title": "another title",
+      "views": 200
+    },
+    {
+      "id": "ff07",
+      "title": "Teste",
+      "author": "Diego"
+    },
+    {
+      "id": "55d5",
+      "title": "Teste",
+      "author": "Diego"
+    },
+    {
+      "id": "a7c7",
+      "title": "Teste",
+      "author": "Diego"
+    },
+    {
+      "id": "37c7",
+      "title": "Teste",
+      "author": "Diego"
+    },
+    {
+      "id": "648f",
+      "title": "Teste",
+      "author": "Diego"
+    },
+    {
+      "id": "2cd6",
+      "title": "Teste",
+      "author": "Diego"
+    },
+    {
+      "id": "c710",
+      "title": "Teste",
+      "author": "Diego"
+    },
+    {
+      "id": "9334",
+      "title": "Teste",
+      "author": "Diego"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "text": "a comment about post 1",
+      "postId": "1"
+    },
+    {
+      "id": "2",
+      "text": "another comment about post 1",
+      "postId": "1"
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
