@@ -1,70 +1,55 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Lista de Postagens em React
 
-## Available Scripts
+Este é um aplicativo simples para exibição de um feed de postagens e comentários, desenvolvido em React. Permite aos usuários criar novas postagens, adicionar comentários às postagens existentes, excluir postagens e comentários, e visualizar ou ocultar os comentários de uma postagem.
 
-In the project directory, you can run:
+## Dependências
 
-### `npm start`
+Este projeto foi desenvolvido utilizando as seguintes dependências (no arquivo `package.json` tem todas dependências presentes no projeto, mesmo em versões anteriores):
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- `json-server`
+- `styled-components`
+- `FontAwesomeIcon`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Os ícones das modais são fornecidos pela biblioteca `FontAwesomeIcon`.
 
-### `npm test`
+## Uso da API
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Este aplicativo utiliza a API Json Placeholder para obter dados simulados de postagens e comentários. Você pode encontrar mais informações e documentação sobre a API em [Json Placeholder](https://jsonplaceholder.typicode.com/).
 
-### `npm run build`
+## Como Utilizar
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Para utilizar este projeto em sua máquina local, siga estas etapas:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Clone este repositório para sua máquina local usando o seguinte comando:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   ```
+   git clone https://github.com/seu-usuario/lista-de-postagens-React.git
+   ```
 
-### `npm run eject`
+2. Navegue até o diretório do projeto:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   ```
+   cd lista-de-postagens-React
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. Instale as dependências necessárias utilizando o Yarn:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```
+   yarn install
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+4. Após a instalação das dependências, inicie o servidor de desenvolvimento:
 
-## Learn More
+   ```
+   yarn start
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+5. Abra seu navegador e acesse http://localhost:3000 para visualizar o aplicativo.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+## Uso do useState e useEffect
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+O `useState` é um hook do React que permite adicionar estado a componentes funcionais. Ele retorna um par de valores: o estado atual e uma função para atualizar esse estado. No projeto, o `useState` é usado para gerenciar o estado das variáveis ​​que armazenam os dados das postagens, comentários e outros elementos do aplicativo.
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+O `useEffect` é outro hook do React que permite realizar efeitos colaterais em componentes funcionais. Ele é usado para realizar operações secundárias após a renderização do componente, como buscar dados de uma API. No projeto, o `useEffect` é utilizado para buscar os dados das postagens e comentários da API Json Placeholder assim que o componente é montado.
