@@ -152,7 +152,7 @@ const App = () => {
           value={newPostContent}
           onChange={(e) => setNewPostContent(e.target.value)}
         />
-        <Button onClick={handleAddPost}>Adicionar Post</Button>
+        <Button onClick={handleAddPost}>+ Nova Postagem</Button>
 
         <PostList>
           {posts.map((post) => (
