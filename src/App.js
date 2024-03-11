@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import GlobalStyle from './style/globalStyle';
 
+// Importe o ícone de opções (por exemplo, Font Awesome)
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 const Container = styled.div`
   max-width: 800px;
@@ -35,21 +38,52 @@ const PostItem = styled.li`
   margin-bottom: 20px;
 `;
 
-const CommentList = styled.ul`
-  list-style: none;
-  padding: 0;
+const ActionButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
 `;
 
-const CommentItem = styled.li`
-  margin-bottom: 10px;
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalContent = styled.div`
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+`;
+
+const ModalText = styled.p`
+  color: red;
+  font-weight: bold;
+  margin-bottom: 20px;
+`;
+
+const ModalButton = styled.button`
+  padding: 10px 20px;
+  margin-right: 10px;
+  background-color: ${({ cancel }) => (cancel ? '#ccc' : '#ff0000')};
+  color: ${({ cancel }) => (cancel ? '#000' : '#fff')};
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 `;
 
 const App = () => {
   const [posts, setPosts] = useState([]);
   const [newPostTitle, setNewPostTitle] = useState('');
   const [newPostContent, setNewPostContent] = useState('');
-  const [newComment, setNewComment] = useState(''); // Adicionado aqui
-  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [postIdToDelete, setPostIdToDelete] = useState(null);
 
   useEffect(() => {
     // Simulação de carregamento de dados
@@ -59,54 +93,46 @@ const App = () => {
         { id: 2, title: 'Post 2', content: 'Conteúdo do Post 2', comments: [] },
         { id: 3, title: 'Post 3', content: 'Conteúdo do Post 3' },
       ]);
-    }, 1000);
+    }, 500);
   }, []);
 
   const handleAddPost = () => {
+    const existingPost = posts.find(post => post.title === newPostTitle);
+    if (existingPost) {
+      alert('Já existe um post com esse título!');
+      return;
+    }
+
     const newPost = {
       id: Date.now(),
       title: newPostTitle,
-      content: newPostContent, // Adiciona o conteúdo do post corretamente
+      content: newPostContent,
       comments: []
     };
-    setPosts([...posts, newPost]);
+
+    const updatedPosts = [...posts, newPost].sort((a, b) => a.title.localeCompare(b.title));
+    setPosts(updatedPosts);
     setNewPostTitle('');
-    setNewPostContent(''); // Limpa o conteúdo do novo post após adicioná-lo
+    setNewPostContent('');
   };
+
+
 
   const handleDeletePost = (postId) => {
-    fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`, {
-      method: 'DELETE',
-    }).then(() => {
-      setPosts(posts.filter(post => post.id !== postId));
-    });
+    setPostIdToDelete(postId);
+    setShowModal(true);
   };
 
-  const handleAddComment = (postId) => {
-    const updatedPosts = posts.map(post => {
-      if (post.id === postId) {
-        return {
-          ...post,
-          comments: [...(post.comments || []), { id: Date.now(), text: newComment }]
-        };
-      }
-      return post;
-    });
+
+  const handleConfirmDelete = () => {
+    const updatedPosts = posts.filter(post => post.id !== postIdToDelete);
     setPosts(updatedPosts);
-    setNewComment('');
+    setShowModal(false);
   };
 
-  const handleDeleteComment = (postId, commentId) => {
-    const updatedPosts = posts.map(post => {
-      if (post.id === postId) {
-        return {
-          ...post,
-          comments: post.comments.filter(comment => comment.id !== commentId)
-        };
-      }
-      return post;
-    });
-    setPosts(updatedPosts);
+
+  const handleCancelDelete = () => {
+    setShowModal(false);
   };
 
   return (
@@ -133,25 +159,23 @@ const App = () => {
             <PostItem key={post.id}>
               <h2>{post.title}</h2>
               <p>{post.content}</p>
-              <Button onClick={() => handleDeletePost(post.id)}>Excluir Post</Button>
-              <CommentList>
-                {post.comments && post.comments.map((comment) => (
-                  <CommentItem key={comment.id}>
-                    <p>{comment.text}</p>
-                    <Button onClick={() => handleDeleteComment(post.id, comment.id)}>Excluir Comentário</Button>
-                  </CommentItem>
-                ))}
-              </CommentList>
-              <Input
-                type="text"
-                placeholder="Adicionar Comentário"
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-              />
-              <Button onClick={() => handleAddComment(post.id)}>Adicionar Comentário</Button>
+              <ActionButton onClick={() => handleDeletePost(post.id)}>
+                <FontAwesomeIcon icon={faEllipsisV} />
+              </ActionButton>
             </PostItem>
           ))}
         </PostList>
+
+        {showModal && (
+          <ModalOverlay>
+            <ModalContent>
+              <ModalText>Atenção! Ao excluir esta postagem os comentários também serão excluídos.</ModalText>
+              <ModalButton cancel onClick={handleCancelDelete}>Cancelar</ModalButton>
+              <ModalButton onClick={handleConfirmDelete}>Excluir</ModalButton>
+            </ModalContent>
+          </ModalOverlay>
+        )}
+
       </Container>
     </>
   );
