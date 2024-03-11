@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import GlobalStyle from './style/globalStyle';
-
-// Importe o ícone de opções (por exemplo, Font Awesome)
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+
+const API_URL = 'https://jsonplaceholder.typicode.com/';
 
 const Container = styled.div`
   max-width: 800px;
@@ -99,35 +99,46 @@ const App = () => {
   const [commentInputs, setCommentInputs] = useState({});
 
   useEffect(() => {
-    // Simulação de carregamento de dados
-    setTimeout(() => {
-      setPosts([
-        { id: 1, title: 'Post 1', content: 'Conteúdo do Post 1', comments: [{ id: 1, text: 'Comentário 1' }, { id: 2, text: 'Comentário 2' }] },
-        { id: 2, title: 'Post 2', content: 'Conteúdo do Post 2', comments: [] },
-        { id: 3, title: 'Post 3', content: 'Conteúdo do Post 3', comments: [] },
-      ]);
-    }, 500);
+    // Simulação de carregamento de dados da API JsonPlaceholder
+    fetch(`${API_URL}posts`)
+      .then(response => response.json())
+      .then(data => setPosts(data))
+      .catch(error => console.error('Erro ao buscar posts:', error));
   }, []);
 
   const handleAddPost = () => {
+    // Verifica se já existe um post com o mesmo título
     const existingPost = posts.find(post => post.title === newPostTitle);
     if (existingPost) {
       alert('Já existe um post com esse título!');
       return;
     }
-
+  
+    // Cria um novo post apenas se não houver outro com o mesmo título
     const newPost = {
-      id: Date.now(),
       title: newPostTitle,
-      content: newPostContent,
-      comments: []
+      body: newPostContent,
+      userId: 1 // ID de usuário fictício
     };
-
-    const updatedPosts = [...posts, newPost].sort((a, b) => a.title.localeCompare(b.title));
-    setPosts(updatedPosts);
+  
+    // Simulação de envio de dados para a API JsonPlaceholder
+    fetch(`${API_URL}posts`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newPost)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Novo post adicionado:', data);
+        setPosts([...posts, data]); // Adicionando o novo post à lista de posts
+      })
+      .catch(error => console.error('Erro ao adicionar novo post:', error));
+  
     setNewPostTitle('');
     setNewPostContent('');
-  };
+  };  
 
   const handleDeletePost = (postId) => {
     setPostIdToDelete(postId);
