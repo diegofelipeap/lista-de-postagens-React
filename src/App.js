@@ -113,14 +113,14 @@ const App = () => {
       alert('Já existe um post com esse título!');
       return;
     }
-  
+
     // Cria um novo post apenas se não houver outro com o mesmo título
     const newPost = {
       title: newPostTitle,
       body: newPostContent,
       userId: 1 // ID de usuário fictício
     };
-  
+
     // Simulação de envio de dados para a API JsonPlaceholder
     fetch(`${API_URL}posts`, {
       method: 'POST',
@@ -135,10 +135,10 @@ const App = () => {
         setPosts([...posts, data]); // Adicionando o novo post à lista de posts
       })
       .catch(error => console.error('Erro ao adicionar novo post:', error));
-  
+
     setNewPostTitle('');
     setNewPostContent('');
-  };  
+  };
 
   const handleDeletePost = (postId) => {
     setPostIdToDelete(postId);
