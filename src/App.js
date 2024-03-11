@@ -99,7 +99,6 @@ const App = () => {
   const [commentInputs, setCommentInputs] = useState({});
 
   useEffect(() => {
-    // Simulação de carregamento de dados da API JsonPlaceholder
     fetch(`${API_URL}posts`)
       .then(response => response.json())
       .then(data => setPosts(data))
@@ -107,21 +106,18 @@ const App = () => {
   }, []);
 
   const handleAddPost = () => {
-    // Verifica se já existe um post com o mesmo título
     const existingPost = posts.find(post => post.title === newPostTitle);
     if (existingPost) {
       alert('Já existe um post com esse título!');
       return;
     }
 
-    // Cria um novo post apenas se não houver outro com o mesmo título
     const newPost = {
       title: newPostTitle,
       body: newPostContent,
       userId: 1 // ID de usuário fictício
     };
 
-    // Simulação de envio de dados para a API JsonPlaceholder
     fetch(`${API_URL}posts`, {
       method: 'POST',
       headers: {
@@ -132,7 +128,7 @@ const App = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Novo post adicionado:', data);
-        setPosts([...posts, data]); // Adicionando o novo post à lista de posts
+        setPosts([...posts, data]);
       })
       .catch(error => console.error('Erro ao adicionar novo post:', error));
 
@@ -227,5 +223,4 @@ const App = () => {
     </>
   );
 };
-
 export default App;
