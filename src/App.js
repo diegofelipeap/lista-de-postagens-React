@@ -36,6 +36,7 @@ const PostItem = styled.li`
   border: 1px solid #ddd;
   padding: 20px;
   margin-bottom: 20px;
+  position: relative;
 `;
 
 const ActionButton = styled.button`
@@ -51,15 +52,17 @@ const ModalOverlay = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
+  display: ${({ open }) => (open ? 'flex' : 'none')};
   justify-content: center;
   align-items: center;
+  z-index: 999;
 `;
 
 const ModalContent = styled.div`
   background-color: #fff;
   padding: 20px;
   border-radius: 5px;
+  z-index: 1000;
 `;
 
 const ModalText = styled.p`
@@ -78,12 +81,22 @@ const ModalButton = styled.button`
   cursor: pointer;
 `;
 
+const CommentList = styled.ul`
+  list-style: none;
+  padding: 0;
+`;
+
+const CommentItem = styled.li`
+  margin-bottom: 10px;
+`;
+
 const App = () => {
   const [posts, setPosts] = useState([]);
   const [newPostTitle, setNewPostTitle] = useState('');
   const [newPostContent, setNewPostContent] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null);
+  const [commentInputs, setCommentInputs] = useState({});
 
   useEffect(() => {
     // Simulação de carregamento de dados
@@ -91,7 +104,7 @@ const App = () => {
       setPosts([
         { id: 1, title: 'Post 1', content: 'Conteúdo do Post 1', comments: [{ id: 1, text: 'Comentário 1' }, { id: 2, text: 'Comentário 2' }] },
         { id: 2, title: 'Post 2', content: 'Conteúdo do Post 2', comments: [] },
-        { id: 3, title: 'Post 3', content: 'Conteúdo do Post 3' },
+        { id: 3, title: 'Post 3', content: 'Conteúdo do Post 3', comments: [] },
       ]);
     }, 500);
   }, []);
@@ -116,13 +129,10 @@ const App = () => {
     setNewPostContent('');
   };
 
-
-
   const handleDeletePost = (postId) => {
     setPostIdToDelete(postId);
     setShowModal(true);
   };
-
 
   const handleConfirmDelete = () => {
     const updatedPosts = posts.filter(post => post.id !== postIdToDelete);
@@ -130,9 +140,22 @@ const App = () => {
     setShowModal(false);
   };
 
-
   const handleCancelDelete = () => {
     setShowModal(false);
+  };
+
+  const handleAddComment = (postId) => {
+    const updatedPosts = posts.map(post => {
+      if (post.id === postId) {
+        return {
+          ...post,
+          comments: [...(post.comments || []), { id: Date.now(), text: commentInputs[postId] }]
+        };
+      }
+      return post;
+    });
+    setPosts(updatedPosts);
+    setCommentInputs({ ...commentInputs, [postId]: '' });
   };
 
   return (
@@ -162,21 +185,34 @@ const App = () => {
               <ActionButton onClick={() => handleDeletePost(post.id)}>
                 <FontAwesomeIcon icon={faEllipsisV} />
               </ActionButton>
+              <Input
+                type="text"
+                placeholder="Adicionar Comentário"
+                value={commentInputs[post.id] || ''}
+                onChange={(e) => setCommentInputs({ ...commentInputs, [post.id]: e.target.value })}
+              />
+              <Button onClick={() => handleAddComment(post.id)}>Adicionar Comentário</Button>
+              <CommentList>
+                {post.comments && post.comments.map((comment) => (
+                  <CommentItem key={comment.id}>
+                    <p>{comment.text}</p>
+                  </CommentItem>
+                ))}
+              </CommentList>
             </PostItem>
           ))}
         </PostList>
-
-        {showModal && (
-          <ModalOverlay>
-            <ModalContent>
-              <ModalText>Atenção! Ao excluir esta postagem os comentários também serão excluídos.</ModalText>
-              <ModalButton cancel onClick={handleCancelDelete}>Cancelar</ModalButton>
-              <ModalButton onClick={handleConfirmDelete}>Excluir</ModalButton>
-            </ModalContent>
-          </ModalOverlay>
-        )}
-
       </Container>
+
+      {showModal && (
+        <ModalOverlay open={showModal}>
+          <ModalContent>
+            <ModalText>Atenção! Ao excluir esta postagem os comentários também serão excluídos.</ModalText>
+            <ModalButton cancel onClick={handleCancelDelete}>Cancelar</ModalButton>
+            <ModalButton onClick={handleConfirmDelete}>Excluir</ModalButton>
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </>
   );
 };
