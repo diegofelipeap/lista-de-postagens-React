@@ -115,7 +115,7 @@ const App = () => {
     const newPost = {
       title: newPostTitle,
       body: newPostContent,
-      userId: 1 // ID de usuário fictício
+      userId: 1
     };
 
     fetch(`${API_URL}posts`, {
